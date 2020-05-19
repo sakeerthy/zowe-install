@@ -10,10 +10,10 @@
 # Copyright IBM Corporation 2018, 2020
 ################################################################################
 
-if [ $# -lt 4 ]; then
-  echo "Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
-  exit 1
-fi
+# if [ $# -lt 4 ]; then
+#   echo "Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
+#   exit 1
+# fi
 
 while getopts "h:i:l:d" opt; do
   case $opt in
