@@ -15,21 +15,21 @@
 #   exit 1
 # fi
 
-while getopts "h:i:l:d" opt; do
-  case $opt in
-    d) # enable debug mode
-      # future use, accept parm to stabilize SMPE packaging
-      #debug="-d"
-      ;;
-    h) DSN_PREFIX=$OPTARG;;
-    i) INSTALL_TARGET=$OPTARG;;
-    l) LOG_DIRECTORY=$OPTARG;;
-    \?)
-      echo "Invalid option: -$opt" >&2
-      exit 1
-      ;;
-  esac
-done
+# while getopts "h:i:l:d" opt; do
+#   case $opt in
+#     d) # enable debug mode
+#       # future use, accept parm to stabilize SMPE packaging
+#       #debug="-d"
+#       ;;
+#     h) DSN_PREFIX=$OPTARG;;
+#     i) INSTALL_TARGET=$OPTARG;;
+#     l) LOG_DIRECTORY=$OPTARG;;
+#     \?)
+#       echo "Invalid option: -$opt" >&2
+#       exit 1
+#       ;;
+#   esac
+# done
 shift $(($OPTIND-1))
 
 export INSTALL_DIR=$(cd $(dirname $0)/../;pwd)
