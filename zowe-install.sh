@@ -31,21 +31,23 @@
 #   esac
 # done
 
-while getopts "i" opt; do
-  case $opt in
-    d) # enable debug mode
-      # future use, accept parm to stabilize SMPE packaging
-      #debug="-d"
-      ;;
-    h) DSN_PREFIX=$OPTARG;;
-    i) INSTALL_TARGET=$OPTARG;;
-    l) LOG_DIRECTORY=$OPTARG;;
-    \?)
-      echo "Invalid option: -$opt" >&2
-      exit 1
-      ;;
-  esac
-done
+# while getopts "i" opt; do
+#   case $opt in
+#     d) # enable debug mode
+#       # future use, accept parm to stabilize SMPE packaging
+#       #debug="-d"
+#       ;;
+#     h) DSN_PREFIX=$OPTARG;;
+#     i) INSTALL_TARGET=$OPTARG;;
+#     l) LOG_DIRECTORY=$OPTARG;;
+#     \?)
+#       echo "Invalid option: -$opt" >&2
+#       exit 1
+#       ;;
+#   esac
+# done
+
+INSTALL_DIR=/root/zowe/1.11.0/
 shift $(($OPTIND-1))
 
 echo "Gets here"
