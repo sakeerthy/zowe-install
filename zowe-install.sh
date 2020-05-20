@@ -47,7 +47,7 @@
 #   esac
 # done
 
-INSTALL_DIR=/root/zowe/1.11.0/
+INSTALL_TARGET=/root/zowe/1.11.0/
 shift $(($OPTIND-1))
 
 echo "Gets here"
