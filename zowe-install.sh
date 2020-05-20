@@ -56,6 +56,8 @@ export INSTALL_DIR=$(cd $(dirname $0)/../;pwd)
 
 . ${INSTALL_DIR}/bin/internal/zowe-set-env.sh
 
+echo $INSTALL_DIR
+
 # extract Zowe version from manifest.json
 export ZOWE_VERSION=$(cat $INSTALL_DIR/manifest.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
 
