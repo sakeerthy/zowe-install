@@ -10,26 +10,26 @@
 # Copyright IBM Corporation 2018, 2020
 ################################################################################
 
-# if [ $# -lt 4 ]; then
-#   echo "Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
-#   exit 1
-# fi
+if [ $# -lt 3 ]; then
+  echo "Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
+  exit 1
+fi
 
-# while getopts "h:i:l:d" opt; do
-#   case $opt in
-#     d) # enable debug mode
-#       # future use, accept parm to stabilize SMPE packaging
-#       #debug="-d"
-#       ;;
-#     h) DSN_PREFIX=$OPTARG;;
-#     i) INSTALL_TARGET=$OPTARG;;
-#     l) LOG_DIRECTORY=$OPTARG;;
-#     \?)
-#       echo "Invalid option: -$opt" >&2
-#       exit 1
-#       ;;
-#   esac
-# done
+while getopts "h:i:l:d" opt; do
+  case $opt in
+    d) # enable debug mode
+      # future use, accept parm to stabilize SMPE packaging
+      #debug="-d"
+      ;;
+    h) DSN_PREFIX=$OPTARG;;
+    i) INSTALL_TARGET=$OPTARG;;
+    l) LOG_DIRECTORY=$OPTARG;;
+    \?)
+      echo "Invalid option: -$opt" >&2
+      exit 1
+      ;;
+  esac
+done
 
 # while getopts "i" opt; do
 #   case $opt in
