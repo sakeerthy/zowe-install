@@ -15,7 +15,7 @@ if [ $# -lt 3 ]; then
   exit 1
 fi
 
-while getopts "h:i:l:d" opt; do
+while getopts "h:i:l:d:u" opt; do
   case $opt in
     d) # enable debug mode
       # future use, accept parm to stabilize SMPE packaging
@@ -24,6 +24,7 @@ while getopts "h:i:l:d" opt; do
     h) DSN_PREFIX=$OPTARG;;
     i) INSTALL_TARGET=$OPTARG;;
     l) LOG_DIRECTORY=$OPTARG;;
+    u) UNIX_INSTALL=true;;
     \?)
       echo "Invalid option: -$opt" >&2
       exit 1
