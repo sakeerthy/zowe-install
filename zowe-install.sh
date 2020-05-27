@@ -93,17 +93,18 @@ echo $UNIX_INSTALL
 if [[ -z "$UNIX_INSTALL" ]]
 then
   echo "TEst one"
+  if [[ -z "$DSN_PREFIX" ]]
+  then
+    echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
+    exit 1
+  else
+    ZOWE_DSN_PREFIX=$DSN_PREFIX
+  fi
 else
   echo "Test two"
 fi
 
-if [[ -z "$DSN_PREFIX" ]]
-then
-  echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
-  exit 1
-else
-  ZOWE_DSN_PREFIX=$DSN_PREFIX
-fi
+
 
 echo "Beginning install of Zowe ${ZOWE_VERSION} into directory " $ZOWE_ROOT_DIR
 
