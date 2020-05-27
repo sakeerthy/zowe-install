@@ -10,7 +10,7 @@
 # Copyright IBM Corporation 2018, 2020
 ################################################################################
 
-if [ $# -lt 3 ]; then
+if [ $# -lt 2 ]; then
   echo "Usage: $0 -i <zowe_install_path> -h <zowe_dsn_prefix> [-l <log_directory>]"
   exit 1
 fi
@@ -88,6 +88,7 @@ fi
 echo "Install started at: "`date` >> $LOG_FILE
 
 echo "Do i get here"
+echo $UNIX_INSTALL
 if [[ -z "$DSN_PREFIX" ]]
 then
   echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
