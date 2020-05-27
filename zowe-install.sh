@@ -89,6 +89,12 @@ echo "Install started at: "`date` >> $LOG_FILE
 
 echo "Do i get here"
 echo $UNIX_INSTALL
+if [[ -z "$UNIX_INSTALL"]]
+then
+  echo "TEst one"
+else
+  echo "Test two"
+fi
 if [[ -z "$DSN_PREFIX" ]]
 then
   echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
