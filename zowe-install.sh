@@ -15,6 +15,8 @@ if [ $# -lt 3 ]; then
   exit 1
 fi
 
+echo "TEST"
+
 while getopts "f:h:i:l:d:u" opt; do
   case $opt in
     d) # enable debug mode
@@ -85,7 +87,7 @@ fi
 
 echo "Install started at: "`date` >> $LOG_FILE
 
-
+echo "Do i get here"
 if [[ -z "$DSN_PREFIX" ]]
 then
   echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
