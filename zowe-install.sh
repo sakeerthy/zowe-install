@@ -11,16 +11,17 @@
 ################################################################################
 
 if [ $# -lt 3 ]; then
-  echo "Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
+  echo "Usage: $0 -i <zowe_install_path> -h <zowe_dsn_prefix> [-l <log_directory>]"
   exit 1
 fi
 
-while getopts "h:i:l:d:u" opt; do
+while getopts "f:h:i:l:d:u" opt; do
   case $opt in
     d) # enable debug mode
       # future use, accept parm to stabilize SMPE packaging
       #debug="-d"
       ;;
+    f) LOG_FILE=$OPTARG;; #Internal - used in the smpe-packaging build zip #801
     h) DSN_PREFIX=$OPTARG;;
     i) INSTALL_TARGET=$OPTARG;;
     l) LOG_DIRECTORY=$OPTARG;;
@@ -31,33 +32,11 @@ while getopts "h:i:l:d:u" opt; do
       ;;
   esac
 done
-
-# while getopts "i" opt; do
-#   case $opt in
-#     d) # enable debug mode
-#       # future use, accept parm to stabilize SMPE packaging
-#       #debug="-d"
-#       ;;
-#     h) DSN_PREFIX=$OPTARG;;
-#     i) INSTALL_TARGET=$OPTARG;;
-#     l) LOG_DIRECTORY=$OPTARG;;
-#     \?)
-#       echo "Invalid option: -$opt" >&2
-#       exit 1
-#       ;;
-#   esac
-# done
-
-INSTALL_TARGET=/root/zowe/1.11.0/
 shift $(($OPTIND-1))
-
-echo "Gets here"
 
 export INSTALL_DIR=$(cd $(dirname $0)/../;pwd)
 
 . ${INSTALL_DIR}/bin/internal/zowe-set-env.sh
-
-echo $INSTALL_DIR
 
 # extract Zowe version from manifest.json
 export ZOWE_VERSION=$(cat $INSTALL_DIR/manifest.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')
@@ -77,8 +56,26 @@ fi
 mkdir -p $TEMP_DIR
 chmod a+rwx $TEMP_DIR 
 
-. ${INSTALL_DIR}/bin/utils/setup-log-dir.sh ${LOG_DIRECTORY}
-set_log_file "zowe-install"
+. ${INSTALL_DIR}/bin/utils/setup-log-dir.sh
+. ${INSTALL_DIR}/bin/utils/file-utils.sh #source this here as setup-log-dir can't get it from root as it isn't install yet
+
+if [[ -z "$INSTALL_TARGET" ]]
+then
+  echo "-i parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
+  exit 1
+else
+  ZOWE_ROOT_DIR=$(get_full_path ${INSTALL_TARGET})
+fi
+
+if [[ -z "${LOG_FILE}" ]]
+then
+  set_install_log_directory "${LOG_DIRECTORY}"
+  validate_log_file_not_in_root_dir "${LOG_DIRECTORY}" "${ZOWE_ROOT_DIR}"
+  set_install_log_file "zowe-install"
+else
+  set_install_log_file_from_full_path "${LOG_FILE}"
+  validate_log_file_not_in_root_dir "${LOG_FILE}" "${ZOWE_ROOT_DIR}"
+fi
 
 if [ -z "$ZOWE_VERSION" ]; then
   echo "Error: failed to determine Zowe version."
@@ -88,27 +85,14 @@ fi
 
 echo "Install started at: "`date` >> $LOG_FILE
 
-if [[ -z "$INSTALL_TARGET" ]]
+
+if [[ -z "$DSN_PREFIX" ]]
 then
-  echo "-i parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
+  echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
   exit 1
 else
-  # If the value starts with a ~ for the home variable then evaluate it
-  ZOWE_ROOT_DIR=`sh -c "echo $INSTALL_TARGET"`
-  # If the path is relative, then expand it
-  if [[ "$ZOWE_ROOT_DIR" != /* ]]
-  then
-    ZOWE_ROOT_DIR=$PWD/$ZOWE_ROOT_DIR
-  fi
+  ZOWE_DSN_PREFIX=$DSN_PREFIX
 fi
-
-# if [[ -z "$DSN_PREFIX" ]]
-# then
-#   echo "-h parameter not set. Usage: $0 -i zowe_install_path -h zowe_dsn_prefix"
-#   exit 1
-# else
-#   ZOWE_DSN_PREFIX=$DSN_PREFIX
-# fi
 
 echo "Beginning install of Zowe ${ZOWE_VERSION} into directory " $ZOWE_ROOT_DIR
 
@@ -172,6 +156,7 @@ chmod -R 755 $ZOWE_ROOT_DIR/bin
 chmod -R 755 $ZOWE_ROOT_DIR/scripts/internal
 
 echo "Creating MVS artefacts SZWEAUTH and SZWESAMP" >> $LOG_FILE
+. $INSTALL_DIR/scripts/zowe-install-MVS.sh
 
 echo "Zowe ${ZOWE_VERSION} runtime install completed into"
 echo "  directory " $ZOWE_ROOT_DIR
